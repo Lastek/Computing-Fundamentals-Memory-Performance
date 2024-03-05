@@ -10,8 +10,7 @@
             "request": "launch",
             "mainClass": "cs250.hw2.Memory",
             "projectName": "app",
-            "args": "\"50\" \"10\" \"3\""
-"
+            "args": "\"25000000\" \"1\" \"42\""
         }
     ]
 }
