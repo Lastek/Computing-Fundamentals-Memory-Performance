@@ -15,51 +15,81 @@ public class Memory {
     static int seed;
 
     public static final boolean DEBUG = false;
+    public static final boolean outputCSV = true;
 
     public static void main(String[] args) {
         if (!checkIfEnoughArgs(args))
             System.exit(-1);
 
         setArgs(args);
-        check();
         Experiment_1 e1 = new Experiment_1(size, experiments, seed);
 
         e1.runTests();
 
         Experiment_2 e2 = new Experiment_2(size, experiments, seed);
+        check();
 
         e2.runTests();
 
         Experiment_3 e3 = new Experiment_3(size, experiments, seed);
         e3.runTests();
+        if (outputCSV == true)
+            printcsv(e1, e2, e3);
+        else
+            printData(e1, e2, e3);
 
+    }
+
+    private static void printData(Experiment_1 e1, Experiment_2 e2, Experiment_3 e3) {
         out_println(String.format("Command: java cs250.hw2.Memory %s %s %s", size, experiments, seed));
-        
+
         out_println(String.format("Task 1"));
         out_println(String.format(
                 "Regular: %.5f seconds\nVolatile: %.5f seconds\nAvg regular sum: %.2f\nAvg volatile sum: %.2f\n",
                 e1.avg_measuredTime_NonVolatile / Math.pow(10l, 9l),
                 e1.avg_measuredTime_Volatile / Math.pow(10l, 9l),
                 e1.avg_runningSum_NonVolatile.doubleValue(),
-                e1.avg_runningSum_Volatile.doubleValue()
-                ));
+                e1.avg_runningSum_Volatile.doubleValue()));
 
         // out_println("\n");
         out_println(String.format("Task 2"));
         out_println(String.format(
                 "Avg time to access known element: %.2f nanoseconds\nAvg time to access random element: %.2f nanoseconds\nSum: %.2f\n",
-                e2.avg_measuredTime_first10pct.doubleValue(),
-                e2.avg_measuredTime_last10pct_rnd.doubleValue(),
-                e2.avg_sumTotal.doubleValue()));
+                e2.avg_measuredTime_first10pct,
+                e2.avg_measuredTime_last10pct_rnd,
+                e2.avg_sumTotal));
         // out_println("\n");
 
         out_println(String.format("Task 3"));
         out_println(String.format(
-                "Avg time to find in set: %.2f nanoseconds\nAvg time to find in list: %.2f nanoseconds\n",
-                e3.avg_measuredTime_TreeSet.doubleValue(),
-                e3.avg_measuredTime_LinkedList.doubleValue()
-                ));
+                "Avg time to find in set: %.2f nanoseconds\nAvg time to find in list: %.2f nanoseconds",
+                e3.avg_measuredTime_TreeSet,
+                e3.avg_measuredTime_LinkedList));
+    }
 
+    private static void printcsv(Experiment_1 e1, Experiment_2 e2, Experiment_3 e3) {
+        out_println(String.format("%s, %s, %s,", size, experiments, seed));
+        out_println(String.format("Task 1"));
+        out_println(String.format(
+                "Regular:, %.5f, seconds\nVolatile:, %.5f, seconds\nAvg regular sum:, %.2f,\nAvg volatile sum:, %.2f,",
+                e1.avg_measuredTime_NonVolatile / Math.pow(10l, 9l),
+                e1.avg_measuredTime_Volatile / Math.pow(10l, 9l),
+                e1.avg_runningSum_NonVolatile.doubleValue(),
+                e1.avg_runningSum_Volatile.doubleValue()));
+
+        out_println(String.format("Task 2"));
+        out_println(String.format(
+                "Avg time to access known element:, %.2f, nanoseconds\nAvg time to access random element:, %.2f, nanoseconds\nSum:, %.2f,",
+                e2.avg_measuredTime_first10pct,
+                e2.avg_measuredTime_last10pct_rnd,
+                e2.avg_sumTotal));
+
+        out_println(String.format("Task 3"));
+        out_println(String.format(
+                "Avg time to find in set:, %.2f, nanoseconds\nAvg time to find in list:, %.2f, nanoseconds",
+                e3.avg_measuredTime_TreeSet,
+                e3.avg_measuredTime_LinkedList));
+        out_println("");
     }
 
     private static void setArgs(String[] args) {
@@ -69,10 +99,10 @@ public class Memory {
     }
 
     private static void check() {
-        if(DEBUG == true)
-        if (size == 25000000) {
-            out_println("SIZE IS EQUAL");
-        }
+        if (DEBUG == true)
+            if (size == 25000000) {
+                out_println("SIZE IS EQUAL");
+            }
     }
 
     // @formatting:off
@@ -138,9 +168,9 @@ class Experiment {
         return sum / numElem;
     }
 
-    public Integer avgint(List<Integer> data) {
-        int sum = 0;
-        int numElem = (int) experiments;
+    public Double avgdouble(List<Double> data) {
+        Double sum = 0d;
+        Double numElem = (double) experiments;
         // Long numElem = (long) data.size();
         for (int i = 0; i < numElem; i++) {
             sum += data.get(i);
@@ -148,18 +178,28 @@ class Experiment {
 
         return sum / numElem;
     }
+    // public Integer avgint(List<Integer> data) {
+    // int sum = 0;
+    // int numElem = (int) experiments;
+    // // Long numElem = (long) data.size();
+    // for (int i = 0; i < numElem; i++) {
+    // sum += data.get(i);
+    // }
+
+    // return sum / numElem;
+    // }
 
 }
 
 class Experiment_1 extends Experiment {
 
-    List<Long> measuredTime_Volatile;
-    List<Long> measuredTime_NonVolatile;
+    List<Double> measuredTime_Volatile;
+    List<Double> measuredTime_NonVolatile;
     List<Long> runningSum_Volatile;
     List<Long> runningSum_NonVolatile;
 
-    Long avg_measuredTime_Volatile;
-    Long avg_measuredTime_NonVolatile;
+    Double avg_measuredTime_Volatile;
+    Double avg_measuredTime_NonVolatile;
     Long avg_runningSum_Volatile;
     Long avg_runningSum_NonVolatile;
 
@@ -169,8 +209,8 @@ class Experiment_1 extends Experiment {
     Experiment_1(int size, int experiments, int seed) {
         super(size, experiments, seed);
 
-        this.measuredTime_Volatile = new ArrayList<Long>();
-        this.measuredTime_NonVolatile = new ArrayList<Long>();
+        this.measuredTime_Volatile = new ArrayList<Double>();
+        this.measuredTime_NonVolatile = new ArrayList<Double>();
         this.runningSum_Volatile = new ArrayList<Long>();
         this.runningSum_NonVolatile = new ArrayList<Long>();
     }
@@ -187,15 +227,15 @@ class Experiment_1 extends Experiment {
 
     @Override
     public void calcExperimentAverages() {
-        avg_measuredTime_Volatile = avg(measuredTime_Volatile);
-        avg_measuredTime_NonVolatile = avg(measuredTime_NonVolatile);
+        avg_measuredTime_Volatile = avgdouble(measuredTime_Volatile);
+        avg_measuredTime_NonVolatile = avgdouble(measuredTime_NonVolatile);
         avg_runningSum_Volatile = avg(runningSum_Volatile);
         avg_runningSum_NonVolatile = avg(runningSum_NonVolatile);
     }
 
     private void measureMemoryPerformance() {
         long runningTotal = 0;
-        long startTime = System.nanoTime();
+        double startTime = System.nanoTime();
         for (iv = 0; iv < size; iv++) {
             if (iv % 2 == 1) {
                 runningTotal -= iv;
@@ -203,14 +243,14 @@ class Experiment_1 extends Experiment {
                 runningTotal += iv;
             }
         }
-        long endTime = System.nanoTime();
+        double endTime = System.nanoTime();
         measuredTime_Volatile.add(endTime - startTime);
         runningSum_Volatile.add(runningTotal);
     }
 
     private void measureCachePerformance() {
         long runningTotal = 0;
-        long startTime = System.nanoTime();
+        double startTime = System.nanoTime();
         for (i = 0; i < size; i++) {
             if (i % 2 == 1) {
                 runningTotal -= i;
@@ -218,7 +258,7 @@ class Experiment_1 extends Experiment {
                 runningTotal += i;
             }
         }
-        long endTime = System.nanoTime();
+        double endTime = System.nanoTime();
         measuredTime_NonVolatile.add(endTime - startTime);
         runningSum_NonVolatile.add(runningTotal);
     }
@@ -229,13 +269,13 @@ class Experiment_2 extends Experiment {
     public int last10pct;
     public int intermediateSum;
 
-    public List<Long> measuredTime_first10pct;
-    public List<Long> measuredTime_last10pct_rnd;
-    public List<Integer> sumTotal;
+    public List<Double> measuredTime_first10pct;
+    public List<Double> measuredTime_last10pct_rnd;
+    public List<Double> sumTotal;
 
-    Long avg_measuredTime_first10pct;
-    Long avg_measuredTime_last10pct_rnd;
-    Integer avg_sumTotal;
+    Double avg_measuredTime_first10pct;
+    Double avg_measuredTime_last10pct_rnd;
+    Double avg_sumTotal;
 
     public Integer[] array;
 
@@ -245,13 +285,12 @@ class Experiment_2 extends Experiment {
         measuredTime_first10pct = new ArrayList<>();
         measuredTime_last10pct_rnd = new ArrayList<>();
 
-        sumTotal = new ArrayList<Integer>();
+        sumTotal = new ArrayList<Double>();
 
         initArray();
         fillArray();
         delineateAccess();
     }
-
 
     private void initArray() {
         array = new Integer[size];
@@ -267,12 +306,17 @@ class Experiment_2 extends Experiment {
         first10pct = size / 10;
         last10pct = size - first10pct;
     }
-    
+
     @Override
     public void calcExperimentAverages() {
-        avg_measuredTime_first10pct = avg(measuredTime_first10pct);
-        avg_measuredTime_last10pct_rnd = avg(measuredTime_last10pct_rnd);
-        avg_sumTotal = avgint(sumTotal);
+        avg_measuredTime_first10pct = avgdouble(measuredTime_first10pct);
+        avg_measuredTime_last10pct_rnd = avgdouble(measuredTime_last10pct_rnd);
+        // avg_sumTotal = avgdouble(sumTotal);
+        int p = 0;
+        for (int i = 0; i < sumTotal.size(); i++) {
+            p += sumTotal.get(i).intValue();
+        }
+        avg_sumTotal = (double) p / experiments;
     }
 
     @Override
@@ -281,7 +325,7 @@ class Experiment_2 extends Experiment {
         while (x-- > 0) {
             intermediateSum = 0;
             measureArrayAccess();
-            sumTotal.add(intermediateSum);
+            sumTotal.add((double) intermediateSum);
         }
         calcExperimentAverages();
     }
@@ -289,27 +333,32 @@ class Experiment_2 extends Experiment {
     private void measureArrayAccess() {
         measureFirst10pct();
         measureLast10pct_singleElem();
+
     }
 
-    private void measureFirst10pct() {
+    public void measureFirst10pct() {
         int sum = 0;
-        long startTime = System.nanoTime();
+        double startTime = System.nanoTime();
         for (int i = 0; i < first10pct; i++) {
             sum += array[i];
         }
-        long endTime = System.nanoTime();
-        long avgTime = (endTime - startTime) / first10pct;
+        double endTime = System.nanoTime();
+        double avgTime = (endTime - startTime);
+        avgTime /= first10pct;
+
+        // System.out.println("E2: Avg Time: " + avgTime);
         measuredTime_first10pct.add(avgTime);
         intermediateSum += sum;
     }
 
-    private void measureLast10pct_singleElem() {
+    public void measureLast10pct_singleElem() {
         int sum = 0;
-        sum = size - rnd.nextInt(size / 10);
-        long startTime = System.nanoTime();
-        sum = array[sum];
-        long endTime = System.nanoTime();
+        int lastIndex = size - rnd.nextInt(size / 10);
+        double startTime = System.nanoTime();
+        sum = array[lastIndex];
+        double endTime = System.nanoTime();
         measuredTime_last10pct_rnd.add(endTime - startTime);
+        // System.out.println(measuredTime_last10pct_rnd);
         intermediateSum += sum;
     }
 }
@@ -318,11 +367,11 @@ class Experiment_3 extends Experiment {
     TreeSet<Integer> treeSet;
     List<Integer> linkedList;
 
-    List<Long> measuredTime_TreeSet;
-    List<Long> measuredTime_LinkedList;
+    List<Double> measuredTime_TreeSet;
+    List<Double> measuredTime_LinkedList;
 
-    Long avg_measuredTime_TreeSet;
-    Long avg_measuredTime_LinkedList;
+    Double avg_measuredTime_TreeSet;
+    Double avg_measuredTime_LinkedList;
 
     Experiment_3(int size, int experiments, int seed) {
         super(size, experiments, seed);
@@ -353,8 +402,8 @@ class Experiment_3 extends Experiment {
 
     @Override
     public void calcExperimentAverages() {
-        avg_measuredTime_TreeSet = avg(measuredTime_TreeSet);
-        avg_measuredTime_LinkedList = avg(measuredTime_LinkedList);
+        avg_measuredTime_TreeSet = avgdouble(measuredTime_TreeSet);
+        avg_measuredTime_LinkedList = avgdouble(measuredTime_LinkedList);
     }
 
     private void meaasureSearchTime() {
@@ -364,23 +413,23 @@ class Experiment_3 extends Experiment {
     }
 
     private void measureTreeSet(int r) {
-        long startTime = System.nanoTime();
+        double startTime = System.nanoTime();
         treeSet.contains(r);
-        long endTime = System.nanoTime();
+        double endTime = System.nanoTime();
         measuredTime_TreeSet.add(endTime - startTime);
     }
 
     private void measureLinkedList(int r) {
-        long startTime = System.nanoTime();
+        double startTime = System.nanoTime();
         linkedList.contains(r);
-        long endTime = System.nanoTime();
+        double endTime = System.nanoTime();
         measuredTime_LinkedList.add(endTime - startTime);
     }
 }
 
 class GBUtils {
 
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     private static void err_println(String message) {
         System.err.println(message);

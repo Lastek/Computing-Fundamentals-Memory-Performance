@@ -1,48 +1,42 @@
-Command: java cs250.hw2.Memory 25000000 1 42
+25000000, 1, 42,
 Task 1
-Regular: 0.02398 seconds
-Volatile: 0.13309 seconds
-Avg regular sum: -12500000.00
-Avg volatile sum: -12500000.00
-
+Regular:, 0.02361, seconds
+Volatile:, 0.13287, seconds
+Avg regular sum:, -12500000.00,
+Avg volatile sum:, -12500000.00,
 Task 2
-Avg time to access known element: 2.00 nanoseconds
-Avg time to access random element: 276.00 nanoseconds
-Sum: -1027167845.00
-
+Avg time to access known element:, 2.91, nanoseconds
+Avg time to access random element:, 332.00, nanoseconds
+Sum:, -1005470868.00,
 Task 3
-Avg time to find in set: 34400.00 nanoseconds
-Avg time to find in list: 90905397.00 nanoseconds
+Avg time to find in set:, 25838.00, nanoseconds
+Avg time to find in list:, 71477131.00, nanoseconds
 
-Command: java cs250.hw2.Memory 25000000 20 42
+25000000, 20, 42,
 Task 1
-Regular: 0.02416 seconds
-Volatile: 0.12851 seconds
-Avg regular sum: -12500000.00
-Avg volatile sum: -12500000.00
-
+Regular:, 0.03738, seconds
+Volatile:, 0.13088, seconds
+Avg regular sum:, -12500000.00,
+Avg volatile sum:, -12500000.00,
 Task 2
-Avg time to access known element: 0.00 nanoseconds
-Avg time to access random element: 284.00 nanoseconds
-Sum: 44297794.00
-
+Avg time to access known element:, 1.55, nanoseconds
+Avg time to access random element:, 457.55, nanoseconds
+Sum:, -834230.20,
 Task 3
-Avg time to find in set: 5080.00 nanoseconds
-Avg time to find in list: 105331678.00 nanoseconds
+Avg time to find in set:, 5705.60, nanoseconds
+Avg time to find in list:, 83021664.50, nanoseconds
 
-Command: java cs250.hw2.Memory 25000000 200 42
+25000000, 200, 42,
 Task 1
-Regular: 0.02373 seconds
-Volatile: 0.12825 seconds
-Avg regular sum: -12500000.00
-Avg volatile sum: -12500000.00
-
+Regular:, 0.03855, seconds
+Volatile:, 0.12906, seconds
+Avg regular sum:, -12500000.00,
+Avg volatile sum:, -12500000.00,
 Task 2
-Avg time to access known element: 0.00 nanoseconds
-Avg time to access random element: 23867.00 nanoseconds
-Sum: 10366003.00
-
+Avg time to access known element:, 1.32, nanoseconds
+Avg time to access random element:, 710.16, nanoseconds
+Sum:, -9199369.91,
 Task 3
-Avg time to find in set: 3943.00 nanoseconds
-Avg time to find in list: 87667722.00 nanoseconds
+Avg time to find in set:, 4135.83, nanoseconds
+Avg time to find in list:, 66800408.73, nanoseconds
 
