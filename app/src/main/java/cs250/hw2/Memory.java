@@ -1,13 +1,13 @@
 package cs250.hw2;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.LinkedList;
 import java.util.List;
 
 // import java.io.*;
 import java.lang.Math;
 import java.util.Random;
-import java.util.TreeSet;
 
 public class Memory {
     static int size;
@@ -15,7 +15,7 @@ public class Memory {
     static int seed;
 
     public static final boolean DEBUG = false;
-    public static final boolean outputCSV = true;
+    public static final boolean outputCSV = false;
 
     public static void main(String[] args) {
         if (!checkIfEnoughArgs(args))
@@ -427,17 +427,3 @@ class Experiment_3 extends Experiment {
     }
 }
 
-class GBUtils {
-
-    static final boolean DEBUG = false;
-
-    private static void err_println(String message) {
-        System.err.println(message);
-    }
-
-    private static void out_println(String message) {
-        // Make sure this only works when DEBUG is on!
-        if (DEBUG)
-            System.out.println(message);
-    }
-}
