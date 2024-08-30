@@ -6,4 +6,4 @@ The takeaways:
 - Using compact and sequential data structures is preferred.
 - Cache misses have a big impact on performance.
 - The taking advantage of CPU pipelining allows for massive speedups.
-- Conducting measuremets is relatively simple and give interesting insights into performance. 
+- Conducting measurements is relatively simple and gives interesting insights into performance. 
